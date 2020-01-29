@@ -9,15 +9,15 @@ export class MainScene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: "MainScene"
+      key: 'MainScene',
     });
   }
 
   preload(): void {
-    this.load.image("myImage", "../assets/phaser.png");
+    this.load.image('myImage', '../assets/phaser.png');
   }
 
   create(): void {
-    this.phaserSprite = this.add.sprite(400, 300, "myImage");
+    this.phaserSprite = this.add.sprite(400, 300, 'myImage');
   }
 }
