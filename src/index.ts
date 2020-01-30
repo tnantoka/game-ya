@@ -11,9 +11,11 @@ import { MainScene } from './scenes/main-scene';
 const config: Phaser.Types.Core.GameConfig = {
   width: 800,
   height: 600,
-  type: Phaser.AUTO,
-  parent: 'game',
   scene: MainScene,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
 };
 
 export class Game extends Phaser.Game {
