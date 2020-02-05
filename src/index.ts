@@ -1,21 +1,24 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2018 - 2019 digitsensitive
- * @license      {@link https://github.com/digitsensitive/phaser3-typescript/blob/master/LICENSE.md | MIT License}
- */
-
 import 'phaser';
-import { MainScene } from './scenes/main-scene';
+import * as WebFont from 'webfontloader';
 
-// main game configuration
+import TitleScene from './scenes/title_scene';
+import PlayScene from './scenes/play_scene';
+
 const config: Phaser.Types.Core.GameConfig = {
-  width: 800,
-  height: 600,
-  scene: MainScene,
+  width: 320,
+  height: 480,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 300 },
+      debug: true,
+    },
+  },
+  scene: [TitleScene, PlayScene],
 };
 
 export class Game extends Phaser.Game {
@@ -24,8 +27,11 @@ export class Game extends Phaser.Game {
   }
 }
 
-// when the page is loaded, create our game instance
-window.addEventListener('load', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const game = new Game(config);
+WebFont.load({
+  google: {
+    families: ['Press Start 2P'],
+  },
+  fontactive: () => {
+    new Game(config);
+  },
 });
