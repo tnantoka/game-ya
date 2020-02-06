@@ -5,11 +5,23 @@ export default class PlayScene extends Phaser.Scene {
   private fire: Phaser.GameObjects.Graphics;
   private fireBody: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   private enemy: Phaser.GameObjects.Graphics;
+  private enemyBody: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   constructor() {
     super({
       key: 'Play',
     });
+  }
+
+  preload(): void {
+    const texture = this.game.textures.createCanvas(
+      'explosion',
+      this.cameras.main.width * 0.1,
+      this.cameras.main.width * 0.1
+    );
+    texture.context.fillStyle = 'rgba(255, 0, 0, 0.5)';
+    texture.context.fillRect(0, 0, texture.width, texture.height);
+    texture.refresh();
   }
 
   create(): void {
@@ -32,8 +44,7 @@ export default class PlayScene extends Phaser.Scene {
       duration: 1000,
       repeat: 0,
       onComplete: () => {
-        this.isReady = true;
-        this.goNext();
+        this.start();
       },
     });
 
@@ -54,10 +65,36 @@ export default class PlayScene extends Phaser.Scene {
         this.fireBody.setOffset(fireSize * 0.25, fireSize * 0.25);
 
         this.physics.add.overlap(this.fire, this.enemy, () => {
-          console.log('hit');
+          this.enemy.destroy();
+          this.fire.destroy();
+          this.fire = null;
+          this.isReady = false;
+
+          const particles = this.add.particles('explosion');
+          particles.createEmitter({
+            x: this.enemyBody.center.x,
+            y: this.enemyBody.center.y,
+            speed: 100,
+            scale: { start: 1, end: 0 },
+            maxParticles: 30,
+          });
+
+          this.time.delayedCall(
+            1000,
+            () => {
+              this.start();
+            },
+            null,
+            null
+          );
         });
       }
     });
+  }
+
+  start(): void {
+    this.isReady = true;
+    this.goNext();
   }
 
   update(): void {
@@ -71,16 +108,16 @@ export default class PlayScene extends Phaser.Scene {
   goNext(): void {
     const enemySize = this.cameras.main.width * 0.2;
     this.enemy = addPixelGraphics(this, 'enemy', {
-      x: 0,
+      x: -enemySize,
       y: this.cameras.main.height * 0.2,
       size: enemySize,
       length: 16,
     });
     this.physics.add.existing(this.enemy);
-    const enemyBody: any = this.enemy.body; // eslint-disable-line @typescript-eslint/no-explicit-any
-    enemyBody.allowGravity = false;
-    enemyBody.setSize(enemySize * 0.5, enemySize * 0.5);
-    enemyBody.setOffset(enemySize * 0.25, enemySize * 0.25);
+    this.enemyBody = this.enemy.body; // eslint-disable-line @typescript-eslint/no-explicit-any
+    this.enemyBody.allowGravity = false;
+    this.enemyBody.setSize(enemySize * 0.5, enemySize * 0.5);
+    this.enemyBody.setOffset(enemySize * 0.25, enemySize * 0.25);
 
     this.tweens.add({
       targets: this.enemy,

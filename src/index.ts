@@ -31,7 +31,11 @@ WebFont.load({
   google: {
     families: ['Press Start 2P'],
   },
-  fontactive: () => {
+  custom: {
+    families: ['MisakiGothic2nd'],
+    urls: ['/assets/fonts.css'],
+  },
+  active: () => {
     new Game(config);
   },
 });
