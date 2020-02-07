@@ -3,6 +3,8 @@ import * as WebFont from 'webfontloader';
 
 import TitleScene from './scenes/title_scene';
 import PlayScene from './scenes/play_scene';
+import ResultScene from './scenes/result_scene';
+import BackgroundScene from './scenes/background_scene';
 
 const config: Phaser.Types.Core.GameConfig = {
   width: 320,
@@ -15,10 +17,10 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { y: 300 },
-      debug: true,
+      debug: false,
     },
   },
-  scene: [TitleScene, PlayScene],
+  scene: [BackgroundScene, TitleScene, PlayScene, ResultScene],
 };
 
 export class Game extends Phaser.Game {

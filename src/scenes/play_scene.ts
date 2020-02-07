@@ -6,6 +6,8 @@ export default class PlayScene extends Phaser.Scene {
   private fireBody: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   private enemy: Phaser.GameObjects.Graphics;
   private enemyBody: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  private wave = 0;
+  private score: Phaser.GameObjects.Text;
 
   constructor() {
     super({
@@ -14,14 +16,31 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   preload(): void {
-    const texture = this.game.textures.createCanvas(
-      'explosion',
-      this.cameras.main.width * 0.1,
-      this.cameras.main.width * 0.1
-    );
-    texture.context.fillStyle = 'rgba(255, 0, 0, 0.5)';
-    texture.context.fillRect(0, 0, texture.width, texture.height);
-    texture.refresh();
+    if (!this.textures.list['explosion']) {
+      const texture = this.game.textures.createCanvas(
+        'explosion',
+        this.cameras.main.width * 0.1,
+        this.cameras.main.width * 0.1
+      );
+      texture.context.fillStyle = 'rgba(255, 0, 0, 0.5)';
+      texture.context.fillRect(0, 0, texture.width, texture.height);
+      texture.refresh();
+    }
+    if (!this.textures.list['jet']) {
+      const texture = this.game.textures.createCanvas(
+        'jet',
+        this.cameras.main.width * 0.05,
+        this.cameras.main.width * 0.05
+      );
+      texture.context.fillStyle = 'rgba(255, 150, 0, 0.5)';
+      texture.context.fillRect(0, 0, texture.width, texture.height);
+      texture.refresh();
+    }
+    this.fire = null;
+    this.fireBody = null;
+    this.enemy = null;
+    this.enemyBody = null;
+    this.wave = 0;
   }
 
   create(): void {
@@ -33,18 +52,34 @@ export default class PlayScene extends Phaser.Scene {
       length: 16,
     });
     player.setDepth(1);
+    const particles = this.add.particles('jet');
+    const emitter = particles.createEmitter({
+      x: -this.cameras.main.centerX,
+      y: -this.cameras.main.centerY,
+      speed: 30,
+      scale: { start: 1, end: 0 },
+      visible: false,
+    });
 
     this.tweens.add({
       targets: player,
       y: {
         from: this.cameras.main.height + playerSize,
-        to: this.cameras.main.height - playerSize,
+        to: this.cameras.main.height * 0.99 - playerSize,
       },
       ease: 'Linear',
       duration: 1000,
       repeat: 0,
       onComplete: () => {
         this.start();
+      },
+      onStart: () => {
+        emitter.startFollow(
+          player,
+          this.cameras.main.centerX + playerSize * 0.5,
+          this.cameras.main.centerY + playerSize
+        );
+        emitter.visible = true;
       },
     });
 
@@ -90,10 +125,21 @@ export default class PlayScene extends Phaser.Scene {
         });
       }
     });
+
+    this.score = this.add.text(
+      this.cameras.main.width * 0.99,
+      this.cameras.main.height * 0.01,
+      ''
+    );
+    this.score.setOrigin(1, 0);
+    this.score.setFill('#ffffff');
+    this.score.setFontFamily('"Press Start 2P"');
+    this.score.setFontSize(this.cameras.main.width * 0.05);
   }
 
   start(): void {
     this.isReady = true;
+    this.wave++;
     this.goNext();
   }
 
@@ -101,15 +147,16 @@ export default class PlayScene extends Phaser.Scene {
     if (this.isReady && this.fire && this.fire.y < 0) {
       this.fireBody.setVelocityY(0);
       this.isReady = false;
-      console.log('game over');
+      this.scene.transition({ target: 'Result' });
     }
+    this.score.setText(`wave ${this.wave}`);
   }
 
   goNext(): void {
     const enemySize = this.cameras.main.width * 0.2;
     this.enemy = addPixelGraphics(this, 'enemy', {
       x: -enemySize,
-      y: this.cameras.main.height * 0.2,
+      y: this.cameras.main.height * 0.3,
       size: enemySize,
       length: 16,
     });
@@ -126,7 +173,7 @@ export default class PlayScene extends Phaser.Scene {
         to: this.cameras.main.width,
       },
       ease: 'Linear',
-      duration: 3000,
+      duration: 3000 - this.wave * 200,
       repeat: -1,
       yoyo: true,
     });

@@ -1,6 +1,4 @@
 export default class TitleScene extends Phaser.Scene {
-  private text1: Phaser.GameObjects.Text;
-
   constructor() {
     super({
       key: 'Title',
@@ -10,7 +8,7 @@ export default class TitleScene extends Phaser.Scene {
   create(): void {
     const title = this.add.text(
       this.cameras.main.centerX,
-      this.cameras.main.centerY,
+      this.cameras.main.centerY - this.cameras.main.height * 0.1,
       '一発屋'
     );
     title.setOrigin(0.5, 0.5);
@@ -20,7 +18,7 @@ export default class TitleScene extends Phaser.Scene {
 
     const start = this.add.text(
       this.cameras.main.centerX,
-      this.cameras.main.height * 0.7,
+      this.cameras.main.centerY + this.cameras.main.height * 0.1,
       'Start'
     );
     start.setOrigin(0.5, 0.5);
