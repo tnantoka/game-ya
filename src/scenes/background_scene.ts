@@ -46,10 +46,10 @@ export default class BackgroundScene extends Phaser.Scene {
     const circle = new Phaser.Geom.Circle(0, 0, radius);
     graphics.fillStyle(0xffffff);
     graphics.fillCircleShape(circle);
-    graphics.alpha = Phaser.Math.Between(0.3, 1.0);
+    graphics.alpha = Phaser.Math.FloatBetween(0.5, 0.9);
 
     this.physics.add.existing(graphics);
-    const body: any = graphics.body; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const body = graphics.body as Phaser.Physics.Arcade.Body;
     body.allowGravity = false;
     body.setVelocityY(Phaser.Math.Between(50, 100));
   }

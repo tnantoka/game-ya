@@ -1,4 +1,4 @@
-# one
+# Ippatsu-ya
 
 ## Acknowledgments
 
