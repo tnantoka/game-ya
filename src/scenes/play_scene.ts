@@ -140,16 +140,17 @@ export default class PlayScene extends Phaser.Scene {
 
   update(): void {
     if (this.isReady && this.fire && this.fire.y < -this.fireSize) {
+      const currentScore = this.wave - 1;
+      localStorage.setItem('highscore', currentScore.toString());
       this.fireBody.setVelocityY(0);
       this.isReady = false;
       this.scene.transition({
         target: 'Result',
         duration: 3000,
-        data: { score: this.wave },
+        data: { score: currentScore },
       });
     }
     this.score.setText(`wave ${this.wave}`);
-    localStorage.setItem('highscore', this.wave.toString());
   }
 
   goNext(): void {

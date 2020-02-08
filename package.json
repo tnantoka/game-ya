@@ -39,7 +39,7 @@
     "webfontloader": "^1.6.28"
   },
   "scripts": {
-    "dev": "webpack --mode development && webpack-dev-server --mode development",
+    "dev": "webpack --mode development && webpack-dev-server --mode development --host 0.0.0.0",
     "build": "webpack --mode production && webpack-dev-server --mode production",
     "lint": "eslint *.js src/*.ts src/**/*.ts",
     "fix": "eslint --fix *.js src/*.ts src/**/*.ts"
