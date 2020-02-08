@@ -1,10 +1,10 @@
 import 'phaser';
 import * as WebFont from 'webfontloader';
 
-import TitleScene from './scenes/title_scene';
-import PlayScene from './scenes/play_scene';
-import ResultScene from './scenes/result_scene';
-import BackgroundScene from './scenes/background_scene';
+import IppatsuYa from './scenes/ippatsu-ya';
+import Hello from './scenes/hello';
+
+const scene = { 'ippatsu-ya': IppatsuYa }[location.search.slice(1)] || Hello;
 
 const config: Phaser.Types.Core.GameConfig = {
   width: 320,
@@ -20,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [BackgroundScene, TitleScene, PlayScene, ResultScene],
+  scene,
 };
 
 export class Game extends Phaser.Game {
