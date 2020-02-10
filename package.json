@@ -36,6 +36,7 @@
   "dependencies": {
     "@types/webfontloader": "^1.6.29",
     "phaser": "3.20.1",
+    "query-string": "^6.10.1",
     "webfontloader": "^1.6.28"
   },
   "scripts": {

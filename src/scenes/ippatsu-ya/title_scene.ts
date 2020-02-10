@@ -1,10 +1,4 @@
 export default class TitleScene extends Phaser.Scene {
-  constructor() {
-    super({
-      key: 'Title',
-    });
-  }
-
   create(): void {
     const title = this.add.text(
       this.cameras.main.centerX,
@@ -27,7 +21,7 @@ export default class TitleScene extends Phaser.Scene {
     start.setFontSize(25);
 
     this.input.on('pointerdown', () => {
-      this.scene.start('Play');
+      this.scene.start('PlayScene');
     });
 
     const score = this.add.text(

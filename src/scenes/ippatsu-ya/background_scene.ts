@@ -3,15 +3,9 @@ export default class BackgroundScene extends Phaser.Scene {
   private elapsedTime = 0;
   private elapsedSeconds = 0;
 
-  constructor() {
-    super({
-      key: 'Background',
-    });
-  }
-
   create(): void {
     this.addStars();
-    this.scene.launch('Title');
+    this.scene.launch('TitleScene');
   }
 
   update(time, delta): void {

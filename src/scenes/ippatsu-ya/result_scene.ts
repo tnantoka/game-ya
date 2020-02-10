@@ -1,12 +1,6 @@
 export default class ResultScene extends Phaser.Scene {
   private score: number;
 
-  constructor() {
-    super({
-      key: 'Result',
-    });
-  }
-
   init(data): void {
     this.score = data.score;
   }
@@ -40,7 +34,7 @@ export default class ResultScene extends Phaser.Scene {
     );
 
     this.input.on('pointerdown', () => {
-      this.scene.start('Play');
+      this.scene.start('PlayScene');
     });
   }
 }

@@ -1,10 +1,19 @@
 import 'phaser';
 import * as WebFont from 'webfontloader';
+import * as queryString from 'query-string';
 
-import IppatsuYa from './scenes/ippatsu-ya';
 import Hello from './scenes/hello';
+import IppatsuYa from './scenes/ippatsu-ya';
+import ColorWheel from './scenes/color-wheel';
 
-const scene = { 'ippatsu-ya': IppatsuYa }[location.search.slice(1)] || Hello;
+const qs = queryString.parse(location.search);
+
+const scene =
+  {
+    'ippatsu-ya': IppatsuYa,
+    'color-wheel': ColorWheel,
+  }[qs.scene as string] || Hello;
+const debug = qs.debug === 'true';
 
 const config: Phaser.Types.Core.GameConfig = {
   width: 320,
@@ -17,10 +26,14 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { y: 300 },
-      debug: false,
+      debug,
+    },
+    matter: {
+      gravity: { y: 1 },
+      debug,
     },
   },
-  scene,
+  // scene,
 };
 
 export class Game extends Phaser.Game {
@@ -38,6 +51,11 @@ WebFont.load({
     urls: ['/assets/fonts.css'],
   },
   active: () => {
-    new Game(config);
+    // new Game(config);
+    const game = new Game(config);
+    [...scene].forEach(sceneClass => {
+      game.scene.add(sceneClass.name, new sceneClass(config));
+    });
+    game.scene.start(scene[0].name);
   },
 });

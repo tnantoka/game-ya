@@ -9,12 +9,6 @@ export default class PlayScene extends Phaser.Scene {
   private wave = 0;
   private score: Phaser.GameObjects.Text;
 
-  constructor() {
-    super({
-      key: 'Play',
-    });
-  }
-
   get fireSize(): number {
     return 40;
   }
@@ -145,7 +139,7 @@ export default class PlayScene extends Phaser.Scene {
       this.fireBody.setVelocityY(0);
       this.isReady = false;
       this.scene.transition({
-        target: 'Result',
+        target: 'ResultScene',
         duration: 3000,
         data: { score: currentScore },
       });

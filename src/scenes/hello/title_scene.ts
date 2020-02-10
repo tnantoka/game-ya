@@ -1,10 +1,4 @@
 export default class TitleScene extends Phaser.Scene {
-  constructor() {
-    super({
-      key: 'Title',
-    });
-  }
-
   create(): void {
     const title = this.add.text(
       this.cameras.main.centerX,
@@ -13,7 +7,7 @@ export default class TitleScene extends Phaser.Scene {
     );
     title.setOrigin(0.5, 0.5);
     title.setFill('#ffffff');
-    title.setFontFamily('"MisakiGothic2nd"');
+    title.setFontFamily("'Press Start 2P'");
     title.setFontSize(50);
   }
 }
