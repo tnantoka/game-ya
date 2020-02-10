@@ -5,6 +5,7 @@ import * as queryString from 'query-string';
 import Hello from './scenes/hello';
 import IppatsuYa from './scenes/ippatsu-ya';
 import ColorWheel from './scenes/color-wheel';
+import HelloMatter from './scenes/hello-matter';
 
 const qs = queryString.parse(location.search);
 
@@ -12,6 +13,7 @@ const scene =
   {
     'ippatsu-ya': IppatsuYa,
     'color-wheel': ColorWheel,
+    'hello-matter': HelloMatter,
   }[qs.scene as string] || Hello;
 const debug = qs.debug === 'true';
 
@@ -29,7 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug,
     },
     matter: {
-      gravity: { y: 1 },
+      gravity: { y: 0.5 },
       debug,
     },
   },
