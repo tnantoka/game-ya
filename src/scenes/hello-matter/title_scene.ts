@@ -1,4 +1,12 @@
 export default class TitleScene extends Phaser.Scene {
+  preload(): void {
+    if (!this.textures.list['box']) {
+      const texture = this.game.textures.createCanvas('box', 30, 30);
+      texture.context.fillStyle = 'rgba(255, 255, 255, 1)';
+      texture.context.fillRect(0, 0, texture.width, texture.height);
+      texture.refresh();
+    }
+  }
   create(): void {
     const title = this.add.text(
       this.cameras.main.centerX,
@@ -13,22 +21,7 @@ export default class TitleScene extends Phaser.Scene {
     this.matter.world.setBounds();
 
     this.input.on('pointerdown', pointer => {
-      const length = 30;
-      const graphics = this.add.graphics({
-        x: pointer.x,
-        y: pointer.y,
-      });
-      graphics.fillStyle(0xffffff);
-      graphics.fillRect(length * -0.5, length * -0.5, length, length);
-
-      const body = this.matter.add.rectangle(
-        graphics.x,
-        graphics.y,
-        length,
-        length,
-        {}
-      );
-      this.matter.add.gameObject(graphics, body);
+      this.matter.add.sprite(pointer.x, pointer.y, 'box');
     });
   }
 }
