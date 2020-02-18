@@ -2,6 +2,7 @@
 const path = require('path');
 const pathToPhaser = path.join(__dirname, '/node_modules/phaser/');
 const phaser = path.join(pathToPhaser, 'dist/phaser.js');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: './src/index.ts',
@@ -31,5 +32,14 @@ module.exports = {
     alias: {
       phaser: phaser,
     },
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          keep_classnames: true,
+        },
+      }),
+    ]
   },
 };
