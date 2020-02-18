@@ -6,6 +6,8 @@ import Hello from './scenes/hello';
 import IppatsuYa from './scenes/ippatsu-ya';
 import ColorWheel from './scenes/color-wheel';
 import HelloMatter from './scenes/hello-matter';
+import ColorWheelMatter from './scenes/color-wheel-matter';
+import HelloIsobox from './scenes/hello-isobox';
 
 const qs = queryString.parse(location.search);
 
@@ -14,6 +16,8 @@ const scene =
     'ippatsu-ya': IppatsuYa,
     'color-wheel': ColorWheel,
     'hello-matter': HelloMatter,
+    'color-wheel-matter': ColorWheelMatter,
+    'hello-isobox': HelloIsobox,
   }[qs.scene as string] || Hello;
 const debug = qs.debug === 'true';
 

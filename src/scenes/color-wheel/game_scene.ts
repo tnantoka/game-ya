@@ -12,13 +12,13 @@ export default class GameScene extends Phaser.Scene {
 
   colorGraphics: Phaser.GameObjects.Graphics[];
   isPointerDown = false;
-  downPointer: { x: number; y: number };
   color: number;
   ball: Phaser.GameObjects.Graphics;
   rotation = 0;
   score = 0;
   label: Phaser.GameObjects.Text;
   isPlaying = true;
+  container: Phaser.GameObjects.Container;
 
   create(): void {
     this.label = this.add.text(
@@ -30,7 +30,7 @@ export default class GameScene extends Phaser.Scene {
     this.label.setFill('#ffffff');
     this.label.setFontSize(50);
 
-    const container = this.add.container(
+    this.container = this.add.container(
       this.cameras.main.centerX,
       this.cameras.main.centerY + 100
     );
@@ -44,7 +44,7 @@ export default class GameScene extends Phaser.Scene {
       graphics.slice(0, 0, this.wheelRadius, startAngle, endAngle);
       graphics.fillStyle(color);
       graphics.fillPath();
-      container.add(graphics);
+      this.container.add(graphics);
 
       this.physics.add.existing(graphics);
       const body = graphics.body as Phaser.Physics.Arcade.Body;
@@ -57,33 +57,31 @@ export default class GameScene extends Phaser.Scene {
 
     this.input.on('pointerdown', pointer => {
       if (this.isPlaying) {
-        this.downPointer = { x: pointer.x, y: pointer.y };
+        if (pointer.x < this.cameras.main.centerX) {
+          this.rotation =
+            this.container.rotation -
+            (Phaser.Math.DegToRad(this.angleStep) % 360);
+        } else if (pointer.x > this.cameras.main.centerX) {
+          this.rotation =
+            this.container.rotation +
+            (Phaser.Math.DegToRad(this.angleStep) % 360);
+        }
+        this.tweens.add({
+          targets: this.container,
+          rotation: this.rotation,
+          ease: 'Linear',
+          duration: 100,
+          repeat: 0,
+          onComplete: () => {
+            this.setColorBodyOffets();
+          },
+        });
       } else {
         this.isPlaying = true;
         this.label.text = '0';
         this.label.updateText();
         this.score = 0;
         this.addBallWithDelay(1);
-      }
-    });
-
-    this.input.on('pointermove', pointer => {
-      if (this.isPointerDown) {
-        const downAngle = Phaser.Math.Angle.Between(
-          container.x,
-          container.y,
-          this.downPointer.x,
-          this.downPointer.y
-        );
-        const moveAngle = Phaser.Math.Angle.Between(
-          container.x,
-          container.y,
-          pointer.x,
-          pointer.y
-        );
-        this.rotation = moveAngle - downAngle;
-        container.rotation = this.rotation;
-        this.setColorBodyOffets();
       }
     });
 
