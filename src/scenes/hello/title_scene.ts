@@ -12,6 +12,7 @@ export default class TitleScene extends Phaser.Scene {
       'hello-matter',
       'color-wheel-matter',
       'hello-isobox',
+      'breakout',
     ].forEach((game, i) => {
       const menu = this.add.text(this.cameras.main.centerX, 120 + i * 40, game);
       menu.setOrigin(0.5, 0.5);

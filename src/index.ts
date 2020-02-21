@@ -8,6 +8,7 @@ import ColorWheel from './scenes/color-wheel';
 import HelloMatter from './scenes/hello-matter';
 import ColorWheelMatter from './scenes/color-wheel-matter';
 import HelloIsobox from './scenes/hello-isobox';
+import Breakout from './scenes/breakout';
 
 const qs = queryString.parse(location.search);
 
@@ -18,6 +19,7 @@ const scene =
     'hello-matter': HelloMatter,
     'color-wheel-matter': ColorWheelMatter,
     'hello-isobox': HelloIsobox,
+    breakout: Breakout,
   }[qs.scene as string] || Hello;
 const debug = qs.debug === 'true';
 
